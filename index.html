@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ABYSHOP — Ultra Premium HD</title>
+<meta name="description" content="Demo premium estilo Samsung: fondo HD integrado, animaciones suaves, glassmorphism y secciones modernas. 100% self-contained.">
+
+<style>
+/* ---------------------------
+    RESET + TOKENS DE DISEÑO
+----------------------------*/
+:root{
+  --bg:#0a0b0f;
+  --bg-2:#0d0f15;
+  --txt:#e8ecf1;
+  --muted:#a9b3c2;
+  --brand:#00e5ff;
+  --brand-2:#7af5ff;
+  --accent:#7d5cff;
+  --danger:#ff3b6b;
+  --ok:#28e07a;
+  --glass: rgba(255,255,255,0.06);
+  --glass-2: rgba(255,255,255,0.08);
+  --stroke: rgba(255,255,255,0.14);
+  --shadow: 0 8px 40px rgba(0,0,0,0.55), 0 0 60px rgba(0,229,255,0.08);
+  --radius-xl: 20px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 10px;
+  --blur: blur(10px);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  background: var(--bg);
+  color: var(--txt);
+  line-height:1.5;
+  overflow-x:hidden;
+}
+
+/* ---------------------------
+    FONDO DE IMAGEN (INTEGRADO)
+    SVG con degradé, ruido sutil y formas abstractas en data URI
+----------------------------*/
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  background:
+     /* capa 1: imagen SVG embebida */
+     url("data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?>\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'>\
+  <defs>\
+     <linearGradient id='g' x1='0' x2='1' y1='0' y2='1'>\
+        <stop offset='0%' stop-color='%23080a12'/>\
+        <stop offset='50%' stop-color='%230a1020'/>\
+        <stop offset='100%' stop-color='%23060a14'/>\
+     </linearGradient>\
+     <radialGradient id='pulse' cx='50%' cy='40%' r='60%'>\
+        <stop offset='0%' stop-color='%2300e5ff' stop-opacity='0.38'/>\
+        <stop offset='60%' stop-color='%2300e5ff' stop-opacity='0.10'/>\
+        <stop offset='100%' stop-color='%2300e5ff' stop-opacity='0'/>\
+     </radialGradient>\
+     <radialGradient id='vio' cx='70%' cy='30%' r='35%'>\
+        <stop offset='0%' stop-color='%237d5cff' stop-opacity='0.45'/>\
+        <stop offset='100%' stop-color='%237d5cff' stop-opacity='0'/>\
+     </radialGradient>\
+     <filter id='grain'>\
+        <feTurbulence type='fractalNoise' baseFrequency='0.98' numOctaves='2' stitchTiles='stitch'/>\
+        <feColorMatrix type='saturate' values='0'/>\
+        <feComponentTransfer>\
+          <feFuncA type='table' tableValues='0 0.08'/>\
+        </feComponentTransfer>\
+     </filter>\
+  </defs>\
+  <rect width='1600' height='900' fill='url(%23g)'/>\
+  <circle cx='800' cy='380' r='520' fill='url(%23pulse)'/>\
+  <circle cx='1200' cy='260' r='380' fill='url(%23vio)'/>\
+  <g opacity='0.25' transform='translate(0,20) rotate(-6,800,450)'>\
+     <path d='M0,650 C280,560 420,720 760,640 C1040,580 1220,720 1600,640 L1600,900 L0,900 Z' fill='%2300e5ff'/>\
+  </g>\
+  <rect width='1600' height='900' filter='url(%23grain)' opacity='0.35'/>\
+</svg>") center/cover no-repeat,
+     /* capa 2: gradiente de apoyo */
+     radial-gradient(1200px 800px at 70% 20%, rgba(0,229,255,0.12), transparent),
+     radial-gradient(1000px 600px at 20% 70%, rgba(125,92,255,0.12), transparent),
+     linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.4));
+}
+body::after{
+  /* brillo sutil en diagonal */
+  content:"";
+  position:fixed;
+  inset:-20% -20% auto -20%;
+  height:60%;
+  transform:skewY(-8deg);
+  background: radial-gradient(800px 300px at 60% 20%, rgba(0,229,255,0.08), transparent);
+  filter: blur(40px);
+  z-index:-1;
+}
+
+/* ---------------------------
+    NAVBAR STICKY + GLASS
+----------------------------*/
+.nav{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter: blur(10px);
+  background: linear-gradient(180deg, rgba(10,12,18,0.65), rgba(10,12,18,0.25));
+  border-bottom:1px solid var(--stroke);
+}
+.nav-inner{
+  max-width:1200px; margin:0 auto; padding:14px 20px;
+  display:flex; align-items:center; gap:16px; justify-content:space-between;
+}
+.brand{
+  display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.3px;
+}
+.brand-badge{
+  width:34px; height:34px; border-radius:10px;
+  background: conic-gradient(from 180deg, var(--brand), var(--accent), var(--brand));
+  box-shadow: 0 0 24px rgba(0,229,255,0.45), inset 0 0 40px rgba(125,92,255,0.18);
+}
+.nav ul{list-style:none; display:flex; gap:18px; flex-wrap:wrap}
+.nav a{
+  color:var(--txt); text-decoration:none; font-weight:600; font-size:.95rem; opacity:.9;
+  padding:10px 12px; border-radius:10px; transition:200ms ease;
+  border:1px solid transparent;
+}
+.nav a:hover{ opacity:1; border-color:var(--stroke); background: rgba(255,255,255,0.03) }
+
+/* ---------------------------
+    HERO
+----------------------------*/
+.hero{
+  min-height:84vh;
+  display:grid; place-items:center;
+  padding:120px 20px 80px;
+}
+.hero-inner{
+  max-width:1200px; display:grid; gap:28px; align-items:center;
+  grid-template-columns: 1.2fr 1fr;
+}
+@media (max-width:980px){
+  .hero-inner{ grid-template-columns:1fr; text-align:center }
+}
+.kicker{
+  display:inline-flex; gap:10px; align-items:center;
+  padding:8px 12px; border-radius:999px; font-size:.85rem; color:var(--muted);
+  background: rgba(255,255,255,0.06); border:1px solid var(--stroke);
+  backdrop-filter: var(--blur);
+}
+.kicker .dot{
+  width:8px; height:8px; border-radius:999px; background: var(--ok);
+  box-shadow: 0 0 10px var(--ok);
+}
+.hero h1{
+  font-size: clamp(2.2rem, 4.6vw, 4rem);
+  line-height:1.08; letter-spacing:.2px;
+  text-shadow: 0 0 20px rgba(0,229,255,0.16);
+}
+.hero p{
+  font-size: clamp(1rem, 1.6vw, 1.2rem); color:var(--muted)
+}
+.cta-row{ display:flex; gap:14px; flex-wrap:wrap; margin-top:6px }
+.btn{
+  appearance:none; cursor:pointer; border:none;
+  padding:12px 18px; border-radius:14px; font-weight:800; letter-spacing:.2px;
+  color:#061219; background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  box-shadow: 0 10px 30px rgba(0,229,255,0.28);
+  transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
+}
+.btn:hover{ transform: translateY(-2px); filter:brightness(1.03); box-shadow: 0 16px 44px rgba(0,229,255,0.36)}
+.btn-ghost{
+  color:var(--txt); background: rgba(255,255,255,0.04);
+  border:1px solid var(--stroke);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+}
+.hero-card{
+  align-self: stretch;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border:1px solid var(--stroke);
+  box-shadow: var(--shadow);
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+}
+.hero-gpu{
+  position:absolute; inset:-20% -10% auto -10%; height:60%;
+  background:
+     radial-gradient(600px 300px at 60% 40%, rgba(0,229,255,0.18), transparent),
+     radial-gradient(480px 200px at 30% 70%, rgba(125,92,255,0.28), transparent);
+  filter: blur(32px);
+  pointer-events:none;
+}
+.metrics{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:8px;
+}
+.metric{
+  padding:12px; border-radius:14px;
+  background: rgba(255,255,255,0.04); border:1px solid var(--stroke); text-align:center;
+}
+.metric h3{ font-size:1.6rem }
+.metric p{ color:var(--muted); font-size:.85rem }
+
+/* ---------------------------
+    SECCIÓN: FEATURES 3D LITE
+----------------------------*/
+.section{
+  max-width:1200px; margin:0 auto; padding:72px 20px;
+}
+.section h2{
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  margin-bottom:10px;
+}
+.section p.lead{ color:var(--muted); max-width:840px }
+.grid{
+  margin-top:26px;
+  display:grid; gap:16px;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+}
+@media (max-width:980px){ .grid{ grid-template-columns:1fr 1fr } }
+@media (max-width:640px){ .grid{ grid-template-columns:1fr } }
+
+.tile{
+  position:relative; padding:18px; border-radius:16px;
+  background: rgba(255,255,255,0.05);
+  border:1px solid var(--stroke);
+  overflow:hidden;
+  transform-style:preserve-3d;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.tile:hover{
+  transform: translateY(-4px) rotateX(1deg) rotateY(-1deg);
+  box-shadow: 0 18px 44px rgba(0,0,0,0.4), 0 0 60px rgba(0,229,255,0.12);
+  background: rgba(255,255,255,0.06);
+}
+.tile .badge{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:.8rem; color:var(--muted);
+  padding:6px 10px; border-radius:999px;
+  background: rgba(255,255,255,0.05); border:1px solid var(--stroke);
+}
+.icon{
+  width:22px; height:22px; border-radius:7px;
+  background: conic-gradient(from 140deg, var(--brand), var(--accent), var(--brand));
+  box-shadow: inset 0 0 22px rgba(125,92,255,0.35);
+}
+.tile h3{ margin:10px 0 6px }
+.tile p{ color:var(--muted) }
+.tile .glow{
+  content:""; position:absolute; inset:auto -10% -10% -10%; height:40%;
+  background: radial-gradient(520px 200px at 60% 20%, rgba(0,229,255,0.16), transparent);
+  filter: blur(30px);
+  pointer-events:none;
+}
+
+/* ---------------------------
+    SECCIÓN: SHOWCASE (bandas animadas)
+----------------------------*/
+.band{
+  margin-top:36px; border-radius:18px; overflow:hidden;
+  border:1px solid var(--stroke);
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+}
+.band-row{
+  display:flex; gap:16px; padding:16px; white-space: nowrap; overflow:hidden;
+  mask-image: linear-gradient(90deg, transparent 0, black 8%, black 92%, transparent 100%);
+}
+.marquee{
+  animation: marquee 22s linear infinite;
+}
+.marquee.rev{ animation-direction: reverse; animation-duration: 28s }
+.tag{
+  display:inline-flex; align-items:center; gap:10px; margin-right:16px;
+  padding:10px 14px; border-radius:14px; font-weight:700; letter-spacing:.2px;
+  color:#061219; background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  filter: drop-shadow(0 8px 24px rgba(0,229,255,0.25));
+}
+.tag.dark{
+  color:var(--txt); background: rgba(255,255,255,0.05); border:1px solid var(--stroke);
+}
+.tag .dot{ width:10px; height:10px; border-radius:999px; background:var(--ok); box-shadow:0 0 12px var(--ok) }
+
+@keyframes marquee{
+  0%{ transform: translateX(0) }
+  100%{ transform: translateX(-50%) }
+}
+
+/* ---------------------------
+    CTA FINAL
+----------------------------*/
+.cta{
+  margin-top:36px;
+  display:grid; gap:16px; grid-template-columns:1.2fr 1fr;
+}
+@media (max-width:980px){ .cta{ grid-template-columns:1fr } }
+.card{
+  padding:20px; border-radius:18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border:1px solid var(--stroke);
+  box-shadow: var(--shadow);
+}
+.card h3{ margin-bottom:6px }
+.card p{ color:var(--muted) }
+.actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:10px }
+
+/* ---------------------------
+    FOOTER
+----------------------------*/
+.footer{
+  margin-top:80px; padding:28px 20px; border-top:1px solid var(--stroke);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.25));
+}
+.footer-inner{
+  max-width:1200px; margin:0 auto; display:flex; gap:16px; justify-content:space-between; flex-wrap:wrap;
+}
+.legal{ color:var(--muted); font-size:.9rem }
+.links{ display:flex; gap:14px; flex-wrap:wrap}
+.links a{ color:var(--muted); text-decoration:none; border-bottom:1px solid transparent }
+.links a:hover{ color:var(--txt); border-bottom-color: var(--txt) }
+
+/* ---------------------------
+    ANIMACIONES EN SCROLL
+----------------------------*/
+.reveal{ opacity:0; transform: translateY(14px); transition: 600ms ease }
+.reveal.show{ opacity:1; transform: translateY(0) }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+     <div class="brand">
+        <span class="brand-badge" aria-hidden="true"></span>
+        <span>ABYSHOP <span style="opacity:.6;font-weight:600">Premium</span></span>
+     </div>
+     <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#tecnologia">Tecnología</a></li>
+        <li><a href="#showcase">Showcase</a></li>
+        <li><a href="#cta">Empezar</a></li>
+     </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header id="inicio" class="hero">
+  <div class="hero-inner">
+     <div class="col reveal show">
+        <div class="kicker"><span class="dot"></span> Disponible ahora • Ultra HD</div>
+        <h1>La próxima experiencia <span style="color:var(--brand)">tecnológica</span> en tu web</h1>
+        <p>Un demo de alto nivel con fondo HD integrado, glassmorphism, animaciones fluidas y diseño elegante inspirado en interfaces premium. Cero dependencias externas: subí este archivo y listo.</p>
+        <div class="cta-row">
+          <button class="btn" onclick="document.getElementById('tecnologia').scrollIntoView({behavior:'smooth'})">Explorar</button>
+          <button class="btn btn-ghost" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Empezar ahora</button>
+        </div>
+        <div class="metrics">
+          <div class="metric"><h3>0</h3><p>Dependencias</p></div>
+          <div class="metric"><h3>1</h3><p>Archivo listo</p></div>
+          <div class="metric"><h3>∞</h3><p>Estilo Premium</p></div>
+        </div>
+     </div>
+
+     <aside class="hero-card reveal show" aria-label="Panel visual">
+        <div class="hero-gpu" aria-hidden="true"></div>
+        <div class="tile" style="margin-bottom:12px">
+          <span class="badge"><span class="icon"></span> Render óptico</span>
+          <h3>Fondo HD integrado</h3>
+          <p>Imagen vectorial + ruido sutil, combinada con gradientes y brillos. Se ve nítida en cualquier pantalla.</p>
+          <span class="glow"></span>
+        </div>
+        <div class="tile" style="margin-bottom:12px">
+          <span class="badge"><span class="icon"></span> Animaciones</span>
+          <h3>Efectos fluidos</h3>
+          <p>Marquee, glassmorphism, profundidad, sombras y micro-interacciones con hover/scroll.</p>
+          <span class="glow"></span>
+        </div>
+        <div class="tile">
+          <span class="badge"><span class="icon"></span> Performance</span>
+          <h3>Ligero y responsivo</h3>
+          <p>Todo en un archivo. Ideal para Netlify, GitHub Pages o cualquier hosting estático.</p>
+          <span class="glow"></span>
+        </div>
+     </aside>
+  </div>
+</header>
+
+<!-- FEATURES -->
+<section id="tecnologia" class="section">
+  <h2 class="reveal">Tecnología visual aplicada</h2>
+  <p class="lead reveal">Componentes diseñados con enfoque en percepción de calidad: contraste, profundidad, gradientes con ruido, luces volumétricas y detalle fino en bordes.</p>
+
+  <div class="grid">
+     <article class="tile reveal">
+        <span class="badge"><span class="icon"></span> Neon edges</span>
+        <h3>Contornos iluminados</h3>
+        <p>Uso sutil de brillos y sombras para separar capas sin saturar. Bordes con luz volumétrica para guiar la vista.</p>
+        <span class="glow"></span>
+     </article>
+     <article class="tile reveal">
+        <span class="badge"><span class="icon"></span> Glass</span>
+        <h3>Glassmorphism real</h3>
+        <p>Capas de vidrio con blur y transparencia física. Texturas suaves sobre fondos complejos para una lectura impecable.</p>
+        <span class="glow"></span>
+     </article>
+     <article class="tile reveal">
+        <span class="badge"><span class="icon"></span> Motion</span>
+        <h3>Movimiento con propósito</h3>
+        <p>Transiciones cortas y elásticas, sin mareos. El movimiento sirve a la comprensión y refuerza el carácter premium.</p>
+        <span class="glow"></span>
+     </article>
+     <article class="tile reveal">
+        <span class="badge"><span class="icon"></span> Depth</span>
+        <h3>Capas y profundidad</h3>
+        <p>Sombras múltiples y luces de acento generan una jerarquía visual clara, útil y sofisticada.</p>
+        <span class="glow"></span>
+     </article>
+     <article class="tile reveal">
+        <span class="badge"><span class="icon"></span> Harmony</span>
+        <h3>Colorimetría equilibrada</h3>
+        <p>Azules cian y violetas acentuados, combinados con base oscura: contraste ideal y estética contemporánea.</p>
+        <span class="glow"></span>
+     </article>
+     <article class="tile reveal">
+        <span class="badge"><span class="icon"></span> Vector</span>
+        <h3>Fondo vectorial</h3>
+        <p>SVG + ruido fractal integrado: peso mínimo, nitidez máxima, cero dependencias externas.</p>
+        <span class="glow"></span>
+     </article>
+  </div>
+
+  <!-- SHOWCASE - BANDAS -->
+  <div id="showcase" class="band reveal" aria-label="Showcase animado">
+     <div class="band-row marquee">
+        <span class="tag"><span class="dot"></span> Premium</span>
+        <span class="tag">Ultra HD</span>
+        <span class="tag">Glass</span>
+        <span class="tag">Neon</span>
+        <span class="tag">Blur</span>
+        <span class="tag">Noise</span>
+        <span class="tag">Depth</span>
+        <span class="tag">Marquee</span>
+        <span class="tag">Gradient</span>
+        <span class="tag">Focus</span>
+        <span class="tag">Responsive</span>
+        <span class="tag">Zero deps</span>
+
+        <!-- duplico para el bucle perfecto sin cortes -->
+        <span class="tag"><span class="dot"></span> Premium</span>
+        <span class="tag">Ultra HD</span>
+        <span class="tag">Glass</span>
+        <span class="tag">Neon</span>
+        <span class="tag">Blur</span>
+        <span class="tag">Noise</span>
+        <span class="tag">Depth</span>
+        <span class="tag">Marquee</span>
+        <span class="tag">Gradient</span>
+        <span class="tag">Focus</span>
+        <span class="tag">Responsive</span>
+        <span class="tag">Zero deps</span>
+     </div>
+
+     <div class="band-row marquee rev">
+        <span class="tag dark">Accesible</span>
+        <span class="tag dark">Ligero</span>
+        <span class="tag dark">Escalable</span>
+        <span class="tag dark">Elegante</span>
+        <span class="tag dark">Moderno</span>
+        <span class="tag dark">Consistente</span>
+        <span class="tag dark">Intencional</span>
+        <span class="tag dark">Sutil</span>
+        <span class="tag dark">Cercano</span>
+        <span class="tag dark">Potente</span>
+
+        <span class="tag dark">Accesible</span>
+        <span class="tag dark">Ligero</span>
+        <span class="tag dark">Escalable</span>
+        <span class="tag dark">Elegante</span>
+        <span class="tag dark">Moderno</span>
+        <span class="tag dark">Consistente</span>
+        <span class="tag dark">Intencional</span>
+        <span class="tag dark">Sutil</span>
+        <span class="tag dark">Cercano</span>
+        <span class="tag dark">Potente</span>
+     </div>
+  </div>
+
+  <!-- CTA -->
+  <div id="cta" class="cta">
+     <div class="card reveal">
+        <h3>Integración instantánea</h3>
+        <p>Subí este archivo a GitHub Pages o Netlify y compartí tu demo premium inmediatamente. Todo el estilo y la imagen de fondo ya están incluidos.</p>
+        <div class="actions">
+          <button class="btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Volver arriba</button>
+          <button class="btn btn-ghost" onclick="alert('Consejo: renombrá el archivo como index.html para GitHub Pages.')">Consejo rápido</button>
+        </div>
+     </div>
+     <div class="card reveal">
+        <h3>Personalizable</h3>
+        <p>Cambiá colores, radios y sombras editando los tokens CSS en <code>:root</code>. El layout responde perfecto en móvil y escritorio.</p>
+        <div class="actions">
+          <button class="btn" onclick="toggleTheme()">Cambiar acento</button>
+          <button class="btn btn-ghost" onclick="pulse()">Efecto pulse</button>
+        </div>
+     </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+     <div class="legal">© 2025 ABYSHOP. Todos los derechos reservados.</div>
+     <nav class="links" aria-label="Enlaces legales">
+        <a href="#" onclick="event.preventDefault(); alert('Términos de ejemplo');">Términos</a>
+        <a href="#" onclick="event.preventDefault(); alert('Privacidad de ejemplo');">Privacidad</a>
+        <a href="#" onclick="event.preventDefault(); alert('Contacto: contacto@abyshop.com');">Contacto</a>
+     </nav>
+  </div>
+</footer>
+
+<script>
+/* ---------------------------
+    REVEAL EN SCROLL
+----------------------------*/
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+     if(e.isIntersecting){ e.target.classList.add('show'); obs.unobserve(e.target) }
+  });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ---------------------------
+    ACCIONES DE DEMO
+----------------------------*/
+function toggleTheme(){
+  // alterna entre dos acentos
+  const root = document.documentElement.style;
+  const current = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim();
+  if(current === 'rgb(0, 229, 255)' || current === '#00e5ff'){
+     root.setProperty('--brand', '#ff7ad9');
+     root.setProperty('--brand-2', '#ffc3f1');
+  }else{
+     root.setProperty('--brand', '#00e5ff');
+     root.setProperty('--brand-2', '#7af5ff');
+  }
+}
+
+function pulse(){
+  // pequeña animación de brillo del fondo (capa ::after)
+  const bodyAfter = document.body;
+  bodyAfter.style.setProperty('--pulse', '1'); // marcador opcional
+  const overlay = document.createElement('div');
+  overlay.style.position = 'fixed';
+  overlay.style.inset = '0';
+  overlay.style.zIndex = '-1';
+  overlay.style.background = 'radial-gradient(1000px 380px at 60% 20%, rgba(0,229,255,0.18), transparent)';
+  overlay.style.filter = 'blur(42px)';
+  overlay.style.animation = 'fadePulse 1200ms ease forwards';
+  document.body.appendChild(overlay);
+  setTimeout(()=>overlay.remove(), 1300);
+}
+
+const style = document.createElement('style');
+style.textContent = `
+@keyframes fadePulse{
+  0%{opacity:0}
+  20%{opacity:1}
+  100%{opacity:0}
+}`;
+document.head.appendChild(style);
+</script>
+</body>
+</html>
